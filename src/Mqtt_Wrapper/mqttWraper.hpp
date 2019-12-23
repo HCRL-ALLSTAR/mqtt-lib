@@ -1,3 +1,19 @@
+/*
+    Mqtt Wrapper => Contains essentials method 
+
+    Method List : 
+    print_topic_list()
+    addTopic(const char *topic)
+    wifi_begin(const char *ssid, const char *password)
+    mqtt_begin(const char *mqttServer, int mqttPort, MQTT_CALLBACK_SIGNATURE)
+    mqtt_reconnect()
+    mqtt_connected()
+    mqtt_loop()
+    mqtt_publish(const char *topic, const char *payload)
+
+
+*/
+
 #include <PubSubClient.h>
 #include <WiFi.h>
 #include <Arduino.h>
