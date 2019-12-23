@@ -2,6 +2,7 @@
     Mqtt Wrapper => Contains essentials method 
 
     Method List : 
+
     print_topic_list()
     addTopic(const char *topic)
     wifi_begin(const char *ssid, const char *password)
@@ -19,9 +20,11 @@
 #include <Arduino.h>
 
 String topic_list[100];
+
 WiFiClient espClient;
 PubSubClient client(espClient);
 
+// Print All    
 void print_topic_list()
 {
     int idx = 0;
