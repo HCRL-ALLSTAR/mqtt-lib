@@ -24,7 +24,8 @@ String topic_list[100];
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-// Print All    
+boolean debug = true;
+// Print All
 void print_topic_list()
 {
     int idx = 0;
@@ -57,17 +58,23 @@ void wifi_begin(const char *ssid, const char *password)
 {
     int count = 0;
     delay(10);
-    // We start by connecting to a WiFi network
-    // Serial.println();
-    // Serial.print("Connecting to ");
-    // Serial.println(ssid);
+    if (debug)
+    {
+        // We start by connecting to a WiFi network
+        Serial.println();
+        Serial.print("Connecting to ");
+        Serial.println(ssid);
+    }
 
     WiFi.begin(ssid, password);
 
     while (WiFi.status() != WL_CONNECTED)
     {
         delay(500);
-        // Serial.print(".");
+        if (debug)
+        {
+            Serial.print(".");
+        }
         count++;
         if (count == 5)
         {
@@ -77,10 +84,14 @@ void wifi_begin(const char *ssid, const char *password)
 
     randomSeed(micros());
 
-    // Serial.println("");
-    // Serial.println("WiFi connected");
-    // Serial.println("IP address: ");
-    // Serial.println(WiFi.localIP());
+    if (debug)
+    {
+
+        Serial.println("");
+        Serial.println("WiFi connected");
+        Serial.println("IP address: ");
+        Serial.println(WiFi.localIP());
+    }
 }
 
 void mqtt_begin(const char *mqttServer, int mqttPort, MQTT_CALLBACK_SIGNATURE)
@@ -95,14 +106,21 @@ void mqtt_reconnect()
     // Loop until we're reconnected
     while (!client.connected())
     {
-        // Serial.print("Attempting MQTT connection...");
+        if (debug)
+        {
+            Serial.print("Attempting MQTT connection...");
+        }
         // Create a random client ID
         String clientId = "ESP8266Client-";
         clientId += String(random(0xffff), HEX);
         // Attempt to connect
         if (client.connect(clientId.c_str()))
         {
-            // Serial.println("connected");
+            if (debug)
+            {
+
+                Serial.println("connected");
+            }
             // Once connected, publish an announcement...
             client.publish("outTopic", "hello world");
             // ... and resubscribe
@@ -112,16 +130,23 @@ void mqtt_reconnect()
                 char buffer[512];
                 topic_list[idx].toCharArray(buffer, topic_list[idx].length() + 1);
                 client.subscribe(buffer);
-                // Serial.println("Start Subscribe =>" + String(buffer));
+                if (debug)
+                {
+                    Serial.println("Start Subscribe =>" + String(buffer));
+                }
                 idx++;
             }
         }
         else
         {
-            // Serial.print("failed, rc=");
-            // Serial.print(client.state());
-            // Serial.println(" try again in 5 seconds");
-            // Wait 5 seconds before retrying
+            if (debug)
+            {
+
+                Serial.print("failed, rc=");
+                Serial.print(client.state());
+                Serial.println(" try again in 5 seconds");
+                //Wait 5 seconds before retrying
+            }
             delay(5000);
         }
     }
