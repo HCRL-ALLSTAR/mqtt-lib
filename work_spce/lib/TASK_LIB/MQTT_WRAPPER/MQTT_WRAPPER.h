@@ -33,7 +33,7 @@ public:
     void Subscribe(const char *topic);                                         //Implement FreeRtos with Delete Task
     void Publish(const char *topic, char *payload);                            //Implement FreeRtos with Delete Task
     void PrintTopic();                                                         //Implement FreeRtos with Delete Task
-    void Update();                                                             // Implement FreeRTOS
+    void Update();
 };
 
 MQTT_WRAPPER::MQTT_WRAPPER(/* args */)
@@ -51,25 +51,19 @@ void MQTT_WRAPPER::Begin(const char *mqttServer, int mqttPort, MQTT_CALLBACK_SIG
     this->mqttPort = mqttPort;
     this->mqtt.setServer(this->mqttServer, this->mqttPort);
     this->mqtt.setCallback(callback);
+    this->Update();
 }
 
 void MQTT_WRAPPER::Subscribe(const char *topic)
 {
     this->currentTopic = (char *)topic;
-    xTaskCreate(Subscribe_code, "Subscribe Task", 1048, this, 2, &Subscribe_Handle);
-    vTaskDelete(Subscribe_Handle);
-}
-
-void MQTT_WRAPPER::Subscribe_code(void *_this)
-{
-    MQTT_WRAPPER task = *(MQTT_WRAPPER *)(_this);
     boolean isAdded = false;
     int idx = 0;
     while (!isAdded)
     {
-        if (task.topicList[idx].length() == 0)
+        if (this->topicList[idx].length() == 0)
         {
-            task.topicList[idx] = task.currentTopic;
+            this->topicList[idx] = this->currentTopic;
             isAdded = !isAdded;
         }
         else
@@ -77,7 +71,16 @@ void MQTT_WRAPPER::Subscribe_code(void *_this)
             idx++;
         }
     }
-    Sprintln("Topic Added : " + String(task.topicList[idx]));
+    Sprintln("Topic Added : " + String(this->topicList[idx]));
+    this->PrintTopic();
+    vTaskDelete(Update_Handle);
+    this->Update();
+}
+
+void MQTT_WRAPPER::Subscribe_code(void *_this)
+{
+    MQTT_WRAPPER task = *(MQTT_WRAPPER *)(_this);
+
     for (;;)
     {
         TaskDelay(delay_Time);
@@ -110,8 +113,8 @@ void MQTT_WRAPPER::reConnect()
         {
             Sprint("failed, rc=");
             Sprint(this->mqtt.state());
-            Sprintln(" try again in 5 seconds");
-            delay(5000);
+            //Sprintln(" try again in 5 seconds");
+            delay(100);
         }
     }
 }
@@ -120,10 +123,8 @@ void MQTT_WRAPPER::Publish(const char *topic, char *payload)
 {
     this->curPubTopic = (char *)topic;
     this->curPayload = payload;
-    xTaskCreate(Publis_code, "Publish Task ", 1024, this, 1, &Publish_Handle);
+    xTaskCreate(Publis_code, "Publish Task ", Default_WiFi_Task_Stack, this, 1, &Publish_Handle);
     vTaskDelete(this->Publish_Handle);
-
-    this->Update();
 }
 
 void MQTT_WRAPPER::Publis_code(void *_this)
@@ -142,7 +143,7 @@ void MQTT_WRAPPER::Publis_code(void *_this)
 
 void MQTT_WRAPPER::Update()
 {
-    xTaskCreate(update_code, "update Task", 2048, this, 1, &this->Update_Handle);
+    xTaskCreate(update_code, "update Task", Default_WiFi_Task_Stack, this, 1, &Update_Handle);
 }
 
 void MQTT_WRAPPER::update_code(void *_this)
@@ -152,10 +153,21 @@ void MQTT_WRAPPER::update_code(void *_this)
     {
         if (!task.mqtt.connected())
         {
+
             task.reConnect();
         }
         task.mqtt.loop();
         TaskDelay(delay_Time);
+    }
+}
+
+void MQTT_WRAPPER::PrintTopic()
+{
+    int idx = 0;
+    while (this->topicList[idx] != '\0')
+    {
+        Sprintln(String(idx) + " : " + topicList[idx]);
+        idx++;
     }
 }
 #endif
