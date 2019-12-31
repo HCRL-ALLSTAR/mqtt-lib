@@ -10,19 +10,14 @@ class MQTT_WRAPPER
 private:
     WiFiClient client;
     PubSubClient mqtt;
-    TaskHandle_t Subscribe_Handle;
-    TaskHandle_t Publish_Handle;
+
     TaskHandle_t Update_Handle;
 
-    char *curPubTopic;
-    char *curPayload;
     char *currentTopic;
     char *mqttServer;
     int mqttPort;
     String topicList[100];
 
-    static void Subscribe_code(void *);
-    static void Publis_code(void *);
     static void update_code(void *);
     void reConnect();
 
@@ -31,7 +26,7 @@ public:
     ~MQTT_WRAPPER();
     void Begin(const char *mqttServer, int mqttPort, MQTT_CALLBACK_SIGNATURE); //Implement FreeRTOS
     void Subscribe(const char *topic);                                         //Implement FreeRtos with Delete Task
-    void Publish(const char *topic, char *payload);                            //Implement FreeRtos with Delete Task
+    void Publish(const char *topic, const char *payload);                      //Implement FreeRtos with Delete Task
     void PrintTopic();                                                         //Implement FreeRtos with Delete Task
     void Update();
 };
@@ -77,16 +72,6 @@ void MQTT_WRAPPER::Subscribe(const char *topic)
     this->Update();
 }
 
-void MQTT_WRAPPER::Subscribe_code(void *_this)
-{
-    MQTT_WRAPPER task = *(MQTT_WRAPPER *)(_this);
-
-    for (;;)
-    {
-        TaskDelay(delay_Time);
-    }
-}
-
 void MQTT_WRAPPER::reConnect()
 {
     int idx = 0;
@@ -119,26 +104,10 @@ void MQTT_WRAPPER::reConnect()
     }
 }
 
-void MQTT_WRAPPER::Publish(const char *topic, char *payload)
+void MQTT_WRAPPER::Publish(const char *topic, const char *payload)
 {
-    this->curPubTopic = (char *)topic;
-    this->curPayload = payload;
-    xTaskCreate(Publis_code, "Publish Task ", Default_WiFi_Task_Stack, this, 1, &Publish_Handle);
-    vTaskDelete(this->Publish_Handle);
-}
 
-void MQTT_WRAPPER::Publis_code(void *_this)
-{
-    MQTT_WRAPPER task = *(MQTT_WRAPPER *)(_this);
-    if (!task.mqtt.connected())
-    {
-        task.reConnect();
-    }
-    task.mqtt.publish(task.curPubTopic, task.curPayload);
-    for (;;)
-    {
-        TaskDelay(delay_Time);
-    }
+    this->mqtt.publish(topic, payload);
 }
 
 void MQTT_WRAPPER::Update()
@@ -153,7 +122,6 @@ void MQTT_WRAPPER::update_code(void *_this)
     {
         if (!task.mqtt.connected())
         {
-
             task.reConnect();
         }
         task.mqtt.loop();

@@ -18,6 +18,6 @@ void setup()
 }
 void loop()
 {
-
+    myTask.MQTT.Publish("/Test2", "Hello");
     TaskDelay(delay_Time);
 }
