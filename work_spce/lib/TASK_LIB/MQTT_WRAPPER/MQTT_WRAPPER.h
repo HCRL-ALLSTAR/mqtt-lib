@@ -11,6 +11,7 @@ private:
     WiFiClient client;
     PubSubClient mqtt;
     TaskHandle_t Subscribe_Handle;
+    TaskHandle_t Publish_Handle;
 
     char *mqttServer;
     int mqttPort;
@@ -18,6 +19,8 @@ private:
     String topicList[100];
 
     static void Subscribe_code(void *);
+    static void Publis_code(void *);
+    void reConnect();
 
 public:
     MQTT_WRAPPER(/* args */);
@@ -50,6 +53,7 @@ void MQTT_WRAPPER::Subscribe(const char *topic)
 {
     this->currentTopic = (char *)topic;
     xTaskCreate(Subscribe_code, "Subscribe Task", 1048, this, 2, &Subscribe_Handle);
+    vTaskDelete(Subscribe_Handle);
 }
 
 void MQTT_WRAPPER::Subscribe_code(void *_this)
@@ -69,10 +73,47 @@ void MQTT_WRAPPER::Subscribe_code(void *_this)
             idx++;
         }
     }
-    vTaskDelete(task.Subscribe_Handle);
+    Sprintln("Topic Added : " + String(task.topicList[idx]));
     for (;;)
     {
         TaskDelay(delay_Time);
     }
+}
+
+void MQTT_WRAPPER::reConnect()
+{
+    int idx = 0;
+    while (!this->mqtt.connected())
+    {
+        Sprintln("Attempting MQTT connection...");
+        String clientId = "ESP8266Client-";
+        clientId += String(random(0xffff), HEX);
+        if (this->mqtt.connect(clientId.c_str()))
+        {
+            Sprintln("Connected");
+            this->mqtt.publish("start", "Hello world");
+            this->mqtt.subscribe("intopic");
+            while (this->topicList[idx].length() != 0)
+            {
+                char buffer[512];
+                this->topicList[idx].toCharArray(buffer, topicList[idx].length() + 1);
+                this->mqtt.subscribe(buffer);
+                Sprintln("Start Subscribe =>" + String(buffer));
+                idx++;
+            }
+        }
+        else
+        {
+            Sprint("failed, rc=");
+            Sprint(this->mqtt.state());
+            Sprintln(" try again in 5 seconds");
+            delay(5000);
+        }
+    }
+}
+
+void MQTT_WRAPPER::Publish(const char *topic, char *payload)
+{
+    if (!this->mqtt.connected())
 }
 #endif
