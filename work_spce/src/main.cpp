@@ -4,7 +4,7 @@ TASK_LIB myTask;
 void setup()
 {
     Serial.begin(Defalult_Baud_Rate);
-    myTask.wifi_Begin(DrZin_WiFi_SSID, DrZin_WiFi_PASS);
+    myTask.WiFi.Begin(DrZin_WiFi_SSID, DrZin_WiFi_PASS);
 }
 
 void loop()
