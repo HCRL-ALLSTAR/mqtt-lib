@@ -12,14 +12,18 @@ private:
     PubSubClient mqtt;
     TaskHandle_t Subscribe_Handle;
     TaskHandle_t Publish_Handle;
+    TaskHandle_t Update_Handle;
 
+    char *curPubTopic;
+    char *curPayload;
+    char *currentTopic;
     char *mqttServer;
     int mqttPort;
-    char *currentTopic;
     String topicList[100];
 
     static void Subscribe_code(void *);
     static void Publis_code(void *);
+    static void update_code(void *);
     void reConnect();
 
 public:
@@ -114,6 +118,44 @@ void MQTT_WRAPPER::reConnect()
 
 void MQTT_WRAPPER::Publish(const char *topic, char *payload)
 {
-    if (!this->mqtt.connected())
+    this->curPubTopic = (char *)topic;
+    this->curPayload = payload;
+    xTaskCreate(Publis_code, "Publish Task ", 1024, this, 1, &Publish_Handle);
+    vTaskDelete(this->Publish_Handle);
+
+    this->Update();
+}
+
+void MQTT_WRAPPER::Publis_code(void *_this)
+{
+    MQTT_WRAPPER task = *(MQTT_WRAPPER *)(_this);
+    if (!task.mqtt.connected())
+    {
+        task.reConnect();
+    }
+    task.mqtt.publish(task.curPubTopic, task.curPayload);
+    for (;;)
+    {
+        TaskDelay(delay_Time);
+    }
+}
+
+void MQTT_WRAPPER::Update()
+{
+    xTaskCreate(update_code, "update Task", 2048, this, 1, &this->Update_Handle);
+}
+
+void MQTT_WRAPPER::update_code(void *_this)
+{
+    MQTT_WRAPPER task = *(MQTT_WRAPPER *)(_this);
+    for (;;)
+    {
+        if (!task.mqtt.connected())
+        {
+            task.reConnect();
+        }
+        task.mqtt.loop();
+        TaskDelay(delay_Time);
+    }
 }
 #endif
