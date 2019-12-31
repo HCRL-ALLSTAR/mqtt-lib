@@ -3,7 +3,7 @@
 boolean show = true;
 
 template <typename W>
-void wifiBegin(W *host, const char *ssid, const char *password)
+void _wifiBegin(W *host, const char *ssid, const char *password)
 {
     int count = 0;
     delay(10);

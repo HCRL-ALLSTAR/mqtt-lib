@@ -1,6 +1,7 @@
 #include "PubSubClient/PubSubClient.h"
+
 boolean debug = true;
-void print_Topic(String *topicList)
+void _print_Topic(String *topicList)
 {
     int idx = 0;
     while (topicList[idx].length() != 0)
@@ -10,7 +11,7 @@ void print_Topic(String *topicList)
     }
 }
 
-void addTopic(String *target, const char *topic)
+void _addTopic(String *target, const char *topic)
 {
     boolean isAdded = false;
     int idx = 0;
@@ -29,14 +30,14 @@ void addTopic(String *target, const char *topic)
 }
 
 template <typename H>
-void mqttBegin(H *host, const char *mqttServer, int mqttPort, MQTT_CALLBACK_SIGNATURE)
+void _mqttBegin(H *host, const char *mqttServer, int mqttPort, MQTT_CALLBACK_SIGNATURE)
 {
     host->setServer(mqttServer, mqttPort);
     host->setCallback(callback);
 }
 
 template <typename H>
-void mqtt_reconnect(H *host, String *topic_list)
+void _mqtt_reconnect(H *host, String *topic_list)
 {
     int idx = 0;
     // Loop until we're reconnected
@@ -89,27 +90,27 @@ void mqtt_reconnect(H *host, String *topic_list)
 }
 
 template <typename H>
-boolean mqtt_connected(H *host)
+boolean _mqtt_connected(H *host)
 {
     return host->connected();
 }
 
 template <typename H>
-void mqtt_loop(H *host, String *topic_list)
+void _mqtt_loop(H *host, String *topic_list)
 {
     if (!host->connected())
     {
-        mqtt_reconnect(host, topic_list);
+        _mqtt_reconnect(host, topic_list);
     }
     host->loop();
 }
 
 template <typename H>
-void mqtt_publish(H *host, const char *topic, const char *payload, String *topic_list)
+void _mqtt_publish(H *host, const char *topic, const char *payload, String *topic_list)
 {
     if (!host->connected())
     {
-        mqtt_reconnect(host, topic_list);
+        _mqtt_reconnect(host, topic_list);
     }
     host->publish(topic, payload);
 }
