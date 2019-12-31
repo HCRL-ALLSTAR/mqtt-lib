@@ -3,33 +3,30 @@
 #include <Arduino.h>
 #include <PubSubClient.h>
 #include <WiFiClient.h>
+#include "Macro_Functions/Macro_Functions.hpp"
 
 class MQTT_WRAPPER
 {
 private:
     WiFiClient client;
     PubSubClient mqtt;
-    template <typename H>
-    void __publish(H *host, const char *topic, const char *payload, String *topic_list);
-    template <typename H>
-    void __loop(H *host, String *topic_list);
-    template <typename H>
-    boolean __connected(H *host);
-    template <typename H>
-    void __reconnect(H *host, String *topic_list);
-    template <typename H>
-    void __Begin(H *host, const char *mqttServer, int mqttPort, MQTT_CALLBACK_SIGNATURE);
-    void __addTopic(String *target, const char *topic);
-    void __printTopic(String *topicList);
+    TaskHandle_t Subscribe_Handle;
+
+    char *mqttServer;
+    int mqttPort;
+    char *currentTopic;
+    String topicList[100];
+
+    static void Subscribe_code(void *);
 
 public:
     MQTT_WRAPPER(/* args */);
     ~MQTT_WRAPPER();
-    void Begin();      //Implement FreeRTOS
-    void Subscribe();  //Implement FreeRtos with Delete Task
-    void Publish();    //Implement FreeRtos with Delete Task
-    void PrintTopic(); //Implement FreeRtos with Delete Task
-    void Update();     // Implement FreeRTOS
+    void Begin(const char *mqttServer, int mqttPort, MQTT_CALLBACK_SIGNATURE); //Implement FreeRTOS
+    void Subscribe(const char *topic);                                         //Implement FreeRtos with Delete Task
+    void Publish(const char *topic, char *payload);                            //Implement FreeRtos with Delete Task
+    void PrintTopic();                                                         //Implement FreeRtos with Delete Task
+    void Update();                                                             // Implement FreeRTOS
 };
 
 MQTT_WRAPPER::MQTT_WRAPPER(/* args */)
@@ -41,7 +38,41 @@ MQTT_WRAPPER::~MQTT_WRAPPER()
 {
 }
 
-void MQTT_WRAPPER::Begin()
+void MQTT_WRAPPER::Begin(const char *mqttServer, int mqttPort, MQTT_CALLBACK_SIGNATURE)
 {
+    this->mqttServer = (char *)mqttServer;
+    this->mqttPort = mqttPort;
+    this->mqtt.setServer(this->mqttServer, this->mqttPort);
+    this->mqtt.setCallback(callback);
+}
+
+void MQTT_WRAPPER::Subscribe(const char *topic)
+{
+    this->currentTopic = (char *)topic;
+    xTaskCreate(Subscribe_code, "Subscribe Task", 1048, this, 2, &Subscribe_Handle);
+}
+
+void MQTT_WRAPPER::Subscribe_code(void *_this)
+{
+    MQTT_WRAPPER task = *(MQTT_WRAPPER *)(_this);
+    boolean isAdded = false;
+    int idx = 0;
+    while (!isAdded)
+    {
+        if (task.topicList[idx].length() == 0)
+        {
+            task.topicList[idx] = task.currentTopic;
+            isAdded = !isAdded;
+        }
+        else
+        {
+            idx++;
+        }
+    }
+    vTaskDelete(task.Subscribe_Handle);
+    for (;;)
+    {
+        TaskDelay(delay_Time);
+    }
 }
 #endif
