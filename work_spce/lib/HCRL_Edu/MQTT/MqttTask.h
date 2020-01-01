@@ -1,5 +1,5 @@
-#ifndef MQTT_WRAPPER_H
-#define MQTT_WRAPPER_H
+#ifndef MQTT_TASK_H
+#define MQTT_TASK_H
 #include <Arduino.h>
 #include <PubSubClient.h>
 #include <WiFiClient.h>
