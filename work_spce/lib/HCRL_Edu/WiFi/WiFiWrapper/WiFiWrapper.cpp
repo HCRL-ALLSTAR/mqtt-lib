@@ -1,5 +1,4 @@
-#ifndef WiFi_Wrapper_CPP
-#define WiFi_Wrapper_CPP
+
 
 #include "WiFiWrapper.h"
 
@@ -49,5 +48,3 @@ char *WiFiWrapper::getPASSWORD()
 {
     return this->PASSWORD;
 }
-
-#endif

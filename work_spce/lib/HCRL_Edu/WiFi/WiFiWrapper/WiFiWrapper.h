@@ -1,8 +1,8 @@
-#include "System/SystemMacros.hpp"
-#ifndef WiFi_Wrapper_H
-#define WiFi_Wrapper_H
+#i
+
 #include <WiFi.h>
 #include <Arduino.h>
+#include "System/SystemMacros.hpp"
 
 class WiFiWrapper
 {
@@ -19,5 +19,3 @@ public:
     char *getSSID();
     char *getPASSWORD();
 };
-
-#endif
