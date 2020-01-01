@@ -6,8 +6,6 @@
 #define HCRL_WiFi_SSID "HCRL-Edu"
 #define HCRL_WiFi_PASS "Hybrid-6Zero7"
 #define Defalult_Baud_Rate 115200
-#define MY_MQTT_SERVER "161.246.6.147"
-#define MY_MQTT_PORT 1883
 #define HCRL_MQTT_SERVER "161.246.6.147"
 #define HCRL_MQTT_PORT 1883
 #define Default_Task_Stack 4096

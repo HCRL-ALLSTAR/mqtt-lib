@@ -1,18 +1,26 @@
 #ifndef WiFi_Wrapper_CPP
 #define WiFi_Wrapper_CPP
+
 #include "WiFiWrapper.h"
 
-template <typename H>
-void WiFiWrapper::Begin(H *host, const char *SSID, const char *PASSWORD)
+WiFiWrapper::WiFiWrapper(/* args */)
+{
+}
+
+WiFiWrapper::~WiFiWrapper()
+{
+}
+
+void WiFiWrapper::Begin(const char *SSID, const char *PASSWORD)
 {
     this->SSID = (char *)SSID;
     this->PASSWORD = (char *)PASSWORD;
 
-    host->begin(this->SSID, this->PASSWORD);
+    WiFi.begin(this->SSID, this->PASSWORD);
     Sprintln("Connect to : " + String(this->SSID));
     Sprint("Start Connection => [ ");
     int startTime = millis();
-    while (host->status() != WL_CONNECTED)
+    while (WiFi.status() != WL_CONNECTED)
     {
         Sprint("=");
         delay(delay_Time);
@@ -24,13 +32,12 @@ void WiFiWrapper::Begin(H *host, const char *SSID, const char *PASSWORD)
     Sprintln(" ] 100% ");
     Sprintln("WiFi Connected");
     Sprint("Local IP : ");
-    Sprintln(host->localIP());
+    Sprintln(WiFi.localIP());
 }
 
-template <typename H>
-boolean WiFiWrapper::Connected(H *host)
+boolean WiFiWrapper::Connected()
 {
-    return host->isConnected();
+    return WiFi.isConnected();
 }
 
 char *WiFiWrapper::getSSID()
