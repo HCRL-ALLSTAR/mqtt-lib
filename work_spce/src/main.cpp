@@ -1,10 +1,11 @@
 #include <Arduino.h>
 #include "System/SystemDefaults.hpp"
 #include "System/SystemMacros.hpp"
-#include "MQTT/MqttWrapper/MqttWrapper.h"
-#include "WiFi/WiFiWrapper/WiFiWrapper.h"
-MqttWrapper wrapper;
-WiFiWrapper wifiWrapper;
+#include "WiFi/WiFiTask.h"
+#include "MQTT/MqttTask.h"
+
+MqttTask mqttTask;
+WiFiTask wifiTask;
 
 void callback(char *Topic, byte *Paylaod, unsigned int Length)
 {
@@ -16,14 +17,12 @@ void callback(char *Topic, byte *Paylaod, unsigned int Length)
 void setup()
 {
     Serial.begin(Defalult_Baud_Rate);
-    wifiWrapper.Begin(HCRL_WiFi_SSID, HCRL_WiFi_PASS);
-    wrapper.Begin(HCRL_MQTT_SERVER, HCRL_MQTT_PORT, callback);
-    wrapper.Subscribe("/Test");
-    wrapper.Subscribe("/Test2");
-    wrapper.PrintTopic();
+    wifiTask.Begin(HCRL_WiFi_SSID, HCRL_WiFi_PASS);
+    mqttTask.Begin(HCRL_MQTT_SERVER, HCRL_MQTT_PORT, callback);
+    mqttTask.Subscribe("/Test");
 }
 
 void loop()
 {
-    wrapper.Update();
+    TaskDelay(delay_Time);
 }

@@ -53,9 +53,9 @@ void MqttWrapper::Reconnect()
     while (!this->mqtt.connected())
     {
         Sprintln("Attempting MQTT connection...");
-        String clientId = "ESP8266Client-";
-        clientId += String(random(0xffff), HEX);
-        if (this->mqtt.connect(clientId.c_str()))
+        // String clientId = "ESP8266Client-";
+        // clientId += String(random(0xffff), HEX);
+        if (this->mqtt.connect("ESP1"))
         {
             Sprintln("Connected");
             this->mqtt.publish("start", "Hello world");
