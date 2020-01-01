@@ -1,8 +1,9 @@
-#include <Arduino.h>
+/*#include <Arduino.h>
 #include "System/SystemDefaults.hpp"
 #include "System/SystemMacros.hpp"
 #include "WiFi/WiFiTask.h"
 #include "MQTT/MqttTask.h"
+#include "MQTT/MqttWrapper/MqttWrapper.h"
 
 MqttTask mqttTask;
 WiFiTask wifiTask;
@@ -26,3 +27,4 @@ void loop()
 {
     TaskDelay(delay_Time);
 }
+*/
