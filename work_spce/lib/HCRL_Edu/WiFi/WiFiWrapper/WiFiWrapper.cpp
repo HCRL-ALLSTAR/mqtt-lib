@@ -1,5 +1,4 @@
 
-
 #include "WiFiWrapper.h"
 
 WiFiWrapper::WiFiWrapper(/* args */)

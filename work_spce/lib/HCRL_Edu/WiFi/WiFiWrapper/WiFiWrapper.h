@@ -1,4 +1,5 @@
-#i
+#ifndef WIFI_WRAPPER_H
+#define WIFI_WRAPPER_H
 
 #include <WiFi.h>
 #include <Arduino.h>
@@ -19,3 +20,5 @@ public:
     char *getSSID();
     char *getPASSWORD();
 };
+
+#endif

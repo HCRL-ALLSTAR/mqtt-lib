@@ -10,18 +10,18 @@ class WiFiTask
 {
 private:
     WiFiWrapper wrapper;
+    TaskHandle_t BeginHandle;
+    static void BeginCode(void *pv);
+    char *SSID;
+    char *PASSWORD;
 
 public:
     WiFiTask(/* args */);
     ~WiFiTask();
+    void Begin(const char *SSID, const char *PASSWORD);
+    boolean isConnected();
+    char *getSSID();
+    char *getPASSWORD();
 };
-
-WiFiTask::WiFiTask(/* args */)
-{
-}
-
-WiFiTask::~WiFiTask()
-{
-}
 
 #endif
