@@ -107,7 +107,6 @@ void MqttTask::reConnect()
 
 void MqttTask::Publish(const char *topic, const char *payload)
 {
-
     this->mqtt.publish(topic, payload);
 }
 
