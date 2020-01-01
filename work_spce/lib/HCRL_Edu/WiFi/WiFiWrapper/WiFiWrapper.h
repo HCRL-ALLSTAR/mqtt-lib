@@ -1,8 +1,9 @@
-#include "System/SystemMacros.hpp"
-#ifndef WiFi_Wrapper_H
-#define WiFi_Wrapper_H
+#ifndef WIFI_WRAPPER_H
+#define WIFI_WRAPPER_H
+
 #include <WiFi.h>
 #include <Arduino.h>
+#include "System/SystemMacros.hpp"
 
 class WiFiWrapper
 {
