@@ -12,15 +12,18 @@ private:
     WiFiClient client;
     PubSubClient mqtt;
 
-    String SubscribeTopic[100];
-    String PublishTopic[100];
+    String SubscribeTopic[MAX_LIST_SIZE];
+    String PublishTopic[MAX_LIST_SIZE];
+
+    char *Server;
+    int Port;
 
 public:
     MqttWrapper(/* args */);
     ~MqttWrapper();
-    void Begin();
-    void Subscribe();
-    void Publish();
+    void Begin(const char *Server, int Port, MQTT_CALLBACK_SIGNATURE);
+    void StartSubscribe(const char *Topic);
+    void Publish(const char *Topic, const char *Payload);
     void ReConnect();
     void Update();
     void PrintSubscribeTopic();
@@ -33,6 +36,90 @@ MqttWrapper::MqttWrapper(/* args */)
 }
 
 MqttWrapper::~MqttWrapper()
+{
+}
+
+void MqttWrapper::Begin(const char *Server, int Port, MQTT_CALLBACK_SIGNATURE)
+{
+    this->Server = (char *)Server;
+    this->Port = Port;
+
+    this->mqtt.setServer(this->Server, this->Port);
+    this->mqtt.setCallback(callback);
+}
+
+void MqttWrapper::StartSubscribe(const char *Topic)
+{
+    boolean isAdded = false;
+    int Index = 0;
+    while (!isAdded)
+    {
+        if (this->SubscribeTopic[Index].length() == 0)
+        {
+            this->SubscribeTopic[Index] = Topic;
+            isAdded = !isAdded;
+        }
+        else
+        {
+            Index++;
+        }
+    }
+    Sprintln(String(this->SubscribeTopic[Index]) + "Added");
+}
+
+void MqttWrapper::Publish(const char *Topic, const char *Payload)
+{
+    this->mqtt.publish(Topic, Payload);
+}
+
+void MqttWrapper::ReConnect()
+{
+    int Index = 0;
+    while (!this->mqtt.connected())
+    {
+        Sprintln("Attempting MQTT connection...");
+        String clientId = "ESP8266Client-";
+        clientId += String(random(0xffff), HEX);
+
+        if (this->mqtt.connect(clientId.c_str()))
+        {
+            Sprintln("Connected");
+
+            this->mqtt.publish("start", "Hello world");
+            this->mqtt.subscribe("intopic");
+
+            while (this->SubscribeTopic[Index].length() != 0)
+            {
+                char buffer[512];
+                this->SubscribeTopic[Index].toCharArray(buffer, SubscribeTopic[Index].length() + 1);
+                this->mqtt.subscribe(buffer);
+                Sprintln("Start Subscribe =>" + String(buffer));
+                Index++;
+            }
+        }
+        else
+        {
+            Sprint("failed, rc=");
+            Sprint(this->mqtt.state());
+            delay(100);
+        }
+    }
+}
+
+void MqttWrapper::Update()
+{
+    if (!this->mqtt.connected())
+    {
+        this->ReConnect();
+    }
+    this->mqtt.loop();
+}
+
+void MqttWrapper::PrintSubscribeTopic()
+{
+}
+
+void MqttWrapper::PrintPublishTopic()
 {
 }
 

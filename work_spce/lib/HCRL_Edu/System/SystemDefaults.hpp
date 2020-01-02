@@ -9,5 +9,5 @@
 #define HCRL_MQTT_SERVER "161.246.6.147"
 #define HCRL_MQTT_PORT 1883
 #define Default_Task_Stack 4096
-
+#define MAX_LIST_SIZE 100
 #endif
