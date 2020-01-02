@@ -1,6 +1,42 @@
-
+#ifndef MQTT_WRAPPER_H
+#define MQTT_WRAPPER_H
 #include <Arduino.h>
+#include <WiFiClient.h>
 #include <PubSubClient.h>
+#include "System/SystemDefaults.hpp"
+#include "System/SystemMacros.hpp"
+
+class MqttWrapper
+{
+private:
+    WiFiClient client;
+    PubSubClient mqtt;
+
+    String SubscribeTopic[100];
+    String PublishTopic[100];
+
+public:
+    MqttWrapper(/* args */);
+    ~MqttWrapper();
+    void Begin();
+    void Subscribe();
+    void Publish();
+    void ReConnect();
+    void Update();
+    void PrintSubscribeTopic();
+    void PrintPublishTopic();
+};
+
+MqttWrapper::MqttWrapper(/* args */)
+{
+    this->mqtt = PubSubClient(client);
+}
+
+MqttWrapper::~MqttWrapper()
+{
+}
+
+/*
 template <class H>
 class MqttWrapper
 {
@@ -102,3 +138,5 @@ bool MqttWrapper<H>::isConnect()
 {
     return this->host->connected();
 }
+*/
+#endif

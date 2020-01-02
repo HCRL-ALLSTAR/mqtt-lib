@@ -39,7 +39,7 @@ void loop()
 #include "MQTT/MqttWrapper/MqttWrapper.h"
 #include "System/SystemDefaults.hpp"
 #include "System/SystemMacros.hpp"
-
+#include "MQTT/MqttTask.h"
 WiFiClient client;
 PubSubClient mqtt(client);
 WiFiTask wifi;
