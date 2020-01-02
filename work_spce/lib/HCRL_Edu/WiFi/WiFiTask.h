@@ -46,7 +46,11 @@ void WiFiTask::Begin(const char *SSID, const char *PASSWORD)
 {
     this->SSID = (char *)SSID;
     this->PASSWORD = (char *)PASSWORD;
-    xTaskCreate(this->BeginCode, "Begin Task", Default_Task_Stack, this, 1, &BeginHandle);
+    xTaskCreate(BeginCode, "Begin Task", Default_Task_Stack * 2, this, 30, &BeginHandle);
+    while (!WiFi.isConnected())
+    {
+        /* code */
+    }
 }
 
 boolean WiFiTask::isConnected()

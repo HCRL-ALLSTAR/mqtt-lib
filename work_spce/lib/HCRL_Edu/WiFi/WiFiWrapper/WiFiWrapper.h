@@ -41,8 +41,8 @@ void WiFiWrapper::Begin(const char *SSID, const char *PASSWORD)
     while (WiFi.status() != WL_CONNECTED)
     {
         Sprint("=");
-        delay(delay_Time);
-        if (millis() - startTime > 3000)
+        TaskDelay(200);
+        if (millis() - startTime > 5000)
         {
             ESP.restart();
         }
