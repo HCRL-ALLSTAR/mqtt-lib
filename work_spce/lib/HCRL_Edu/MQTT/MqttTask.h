@@ -8,15 +8,22 @@
 #include "System/SystemMacros.hpp"
 #include "MqttWrapper/MqttWrapper.h"
 
-class MqttTask
+class MqttTask : public MqttWrapper
 {
 private:
-    WiFiClient client;
-    PubSubClient mqtt;
+    MqttWrapper wrapper;
+
+    TaskHandle_t UpdateHandle;
+
+    static void UpdateCode(void *);
 
 public:
     MqttTask(/* args */);
     ~MqttTask();
+    void Begin(const char *Server, int Port, MQTT_CALLBACK_SIGNATURE);
+    void Update();
+    void StartSubscribe(const char *Topic);
+    void Publish(const char *Topic, const char *Payload);
 };
 
 MqttTask::MqttTask(/* args */)
@@ -25,6 +32,43 @@ MqttTask::MqttTask(/* args */)
 
 MqttTask::~MqttTask()
 {
+}
+
+void MqttTask::Begin(const char *Server, int Port, MQTT_CALLBACK_SIGNATURE)
+{
+    this->wrapper.Begin(Server, Port, callback);
+    this->Update();
+}
+
+void MqttTask::Update()
+{
+    xTaskCreate(UpdateCode, MQTT_UPDATE_TASk, Default_Task_Stack, this, 1, &UpdateHandle);
+}
+void MqttTask::UpdateCode(void *pv)
+{
+    MqttTask *task = (MqttTask *)(pv);
+    for (;;)
+    {
+        task->wrapper.Update();
+        TaskDelay(delay_Time);
+    }
+}
+
+void MqttTask::StartSubscribe(const char *Topic)
+{
+    this->wrapper.StartSubscribe(Topic);
+    vTaskDelete(this->UpdateHandle);
+    this->Update();
+}
+
+void MqttTask::Publish(const char *Topic, const char *Payload)
+{
+    if (!this->wrapper.isConnected())
+    {
+        vTaskDelete(this->UpdateHandle);
+        this->Update();
+    }
+    this->wrapper.Publish(Topic, Payload);
 }
 
 #endif

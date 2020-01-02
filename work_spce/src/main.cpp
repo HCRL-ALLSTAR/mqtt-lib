@@ -43,8 +43,8 @@ void loop()
 WiFiClient client;
 PubSubClient mqtt(client);
 WiFiTask wifi;
-MqttWrapper<PubSubClient> wrapper(&mqtt);
-
+MqttWrapper wrapper;
+MqttTask mqttTask;
 void callback(char *Topic, byte *Paylaod, unsigned int Length)
 {
     Paylaod[Length] = '\0';
@@ -65,12 +65,12 @@ void setup()
 {
     Serial.begin(Defalult_Baud_Rate);
     wifi.Begin(HCRL_WiFi_SSID, HCRL_WiFi_PASS);
-    wrapper.Begin(HCRL_MQTT_SERVER, HCRL_MQTT_PORT, callback);
-    xTaskCreate(UpdateCode, "Update code", Default_Task_Stack, NULL, 1, NULL);
+    mqttTask.Begin(HCRL_MQTT_SERVER, HCRL_MQTT_PORT, callback);
+    mqttTask.StartSubscribe("/Test");
 }
 
 void loop()
 {
-
-    // TaskDelay(1000);
+    mqttTask.Publish("/Test2", "Hello");
+    TaskDelay(1000);
 }

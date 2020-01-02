@@ -10,7 +10,6 @@ class MqttWrapper
 {
 private:
     WiFiClient client;
-    PubSubClient mqtt;
 
     String SubscribeTopic[MAX_LIST_SIZE];
     String PublishTopic[MAX_LIST_SIZE];
@@ -19,6 +18,7 @@ private:
     int Port;
 
 public:
+    PubSubClient mqtt;
     MqttWrapper(/* args */);
     ~MqttWrapper();
     void Begin(const char *Server, int Port, MQTT_CALLBACK_SIGNATURE);
@@ -28,6 +28,8 @@ public:
     void Update();
     void PrintSubscribeTopic();
     void PrintPublishTopic();
+    boolean isConnected();
+    char *GetServer();
 };
 
 MqttWrapper::MqttWrapper(/* args */)
@@ -37,6 +39,16 @@ MqttWrapper::MqttWrapper(/* args */)
 
 MqttWrapper::~MqttWrapper()
 {
+}
+
+boolean MqttWrapper::isConnected()
+{
+    return this->mqtt.connected();
+}
+
+char *MqttWrapper::GetServer()
+{
+    return this->Server;
 }
 
 void MqttWrapper::Begin(const char *Server, int Port, MQTT_CALLBACK_SIGNATURE)
