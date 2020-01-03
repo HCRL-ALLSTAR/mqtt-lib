@@ -14,7 +14,7 @@ private:
     MqttWrapper wrapper;
 
     TaskHandle_t UpdateHandle;
-
+    boolean isNewTopic = false;
     static void UpdateCode(void *);
 
 public:
@@ -49,7 +49,16 @@ void MqttTask::UpdateCode(void *pv)
     MqttTask *task = (MqttTask *)(pv);
     for (;;)
     {
-        task->wrapper.Update();
+        if (task->isNewTopic)
+        {
+            //vTaskDelete(task->UpdateHandle);
+            task->wrapper.Update();
+            task->isNewTopic = false;
+        }
+        if (task->wrapper.isConnected() && !task->isNewTopic)
+        {
+            task->wrapper.Update();
+        }
         TaskDelay(delay_Time);
     }
 }
@@ -57,8 +66,7 @@ void MqttTask::UpdateCode(void *pv)
 void MqttTask::StartSubscribe(const char *Topic)
 {
     this->wrapper.StartSubscribe(Topic);
-    vTaskDelete(this->UpdateHandle);
-    this->Update();
+    this->isNewTopic = true;
 }
 
 void MqttTask::Publish(const char *Topic, const char *Payload)

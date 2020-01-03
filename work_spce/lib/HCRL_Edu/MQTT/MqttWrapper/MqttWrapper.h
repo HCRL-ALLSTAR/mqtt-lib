@@ -17,6 +17,9 @@ private:
     char *Server;
     int Port;
 
+    void Add2List(String *List, const char *Topic);
+    void PrintList(String *List);
+
 public:
     PubSubClient mqtt;
     MqttWrapper(/* args */);
@@ -62,21 +65,7 @@ void MqttWrapper::Begin(const char *Server, int Port, MQTT_CALLBACK_SIGNATURE)
 
 void MqttWrapper::StartSubscribe(const char *Topic)
 {
-    boolean isAdded = false;
-    int Index = 0;
-    while (!isAdded)
-    {
-        if (this->SubscribeTopic[Index].length() == 0)
-        {
-            this->SubscribeTopic[Index] = Topic;
-            isAdded = !isAdded;
-        }
-        else
-        {
-            Index++;
-        }
-    }
-    Sprintln(String(this->SubscribeTopic[Index]) + "Added");
+    this->Add2List(this->SubscribeTopic, Topic);
 }
 
 void MqttWrapper::Publish(const char *Topic, const char *Payload)
@@ -129,10 +118,48 @@ void MqttWrapper::Update()
 
 void MqttWrapper::PrintSubscribeTopic()
 {
+    this->PrintList(this->SubscribeTopic);
 }
 
 void MqttWrapper::PrintPublishTopic()
 {
+    this->PrintList(this->PublishTopic);
+}
+
+void MqttWrapper::PrintList(String *List)
+{
+    int Index = 0;
+    while (List[Index].length() != 0)
+    {
+        Sprintln(String(Index) + " : " + List[Index]);
+        Index += 1;
+    }
+}
+
+void MqttWrapper::Add2List(String *List, const char *Topic)
+{
+    int Index = 0;
+    boolean isAdded = false;
+    while (!isAdded)
+    {
+        if (!List[Index].equals(Topic))
+        {
+            if (List[Index].length() == 0)
+            {
+                List[Index] = Topic;
+                isAdded = !isAdded;
+                Sprintln("Topic Added : " + String(List[Index]));
+            }
+            else
+            {
+                Index += 1;
+            }
+        }
+        else
+        {
+            break;
+        }
+    }
 }
 
 /*

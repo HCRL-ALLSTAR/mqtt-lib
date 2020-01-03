@@ -52,21 +52,15 @@ void callback(char *Topic, byte *Paylaod, unsigned int Length)
     Serial.println("[" + topic_str + "]: " + payload_str);
 }
 
-void UpdateCode(void *pv)
-{
-    for (;;)
-    {
-        wrapper.Update();
-        TaskDelay(delay_Time);
-    }
-}
-
 void setup()
 {
     Serial.begin(Defalult_Baud_Rate);
     wifi.Begin(HCRL_WiFi_SSID, HCRL_WiFi_PASS);
     mqttTask.Begin(HCRL_MQTT_SERVER, HCRL_MQTT_PORT, callback);
     mqttTask.StartSubscribe("/Test");
+    mqttTask.StartSubscribe("/Test3");
+    mqttTask.StartSubscribe("/Test4");
+    //mqttTask.Update();
 }
 
 void loop()
