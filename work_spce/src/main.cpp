@@ -30,21 +30,9 @@ void loop()
 */
 
 #include <Arduino.h>
-#include <PubSubClient.h>
-#include <WiFiClient.h>
-#include <WiFi.h>
+#include "HCRL_Edu.h"
 
-#include "WiFi/WiFiTask.h"
-#include "WiFi/WiFiWrapper/WiFiWrapper.h"
-#include "MQTT/MqttWrapper/MqttWrapper.h"
-#include "System/SystemDefaults.hpp"
-#include "System/SystemMacros.hpp"
-#include "MQTT/MqttTask.h"
-WiFiClient client;
-PubSubClient mqtt(client);
-WiFiTask wifi;
-MqttWrapper wrapper;
-MqttTask mqttTask;
+HCRL_Edu edu;
 void callback(char *Topic, byte *Paylaod, unsigned int Length)
 {
     Paylaod[Length] = '\0';
@@ -55,12 +43,12 @@ void callback(char *Topic, byte *Paylaod, unsigned int Length)
 void setup()
 {
     Serial.begin(Defalult_Baud_Rate);
-    wifi.Begin(HCRL_WiFi_SSID, HCRL_WiFi_PASS);
-    mqttTask.Begin(HCRL_MQTT_SERVER, HCRL_MQTT_PORT, callback);
-    mqttTask.StartSubscribe("/Test");
-    mqttTask.StartSubscribe("/Test3");
-    mqttTask.StartSubscribe("/Test4");
-    mqttTask.PrintSubscribeTopic();
+    edu.WiFi.Begin(HCRL_WiFi_SSID, HCRL_WiFi_PASS);
+    edu.MQTT.Begin(HCRL_MQTT_SERVER, HCRL_MQTT_PORT, callback);
+    edu.MQTT.StartSubscribe("/Test");
+    edu.MQTT.StartSubscribe("/Test3");
+    edu.MQTT.StartSubscribe("/Test4");
+    edu.MQTT.PrintSubscribeTopic();
 }
 
 void loop()
