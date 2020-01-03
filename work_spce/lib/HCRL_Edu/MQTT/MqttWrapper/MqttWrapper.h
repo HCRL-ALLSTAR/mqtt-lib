@@ -2,7 +2,8 @@
 #define MQTT_WRAPPER_H
 #include <Arduino.h>
 #include <WiFiClient.h>
-#include <PubSubClient.h>
+#include "PubSubClient/PubSubClient.h"
+#include "PubSubClient/PubSubClient.cpp"
 #include "System/SystemDefaults.hpp"
 #include "System/SystemMacros.hpp"
 
