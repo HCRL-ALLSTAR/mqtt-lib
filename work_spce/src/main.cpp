@@ -13,7 +13,8 @@ void setup()
 {
     Serial.begin(Defalult_Baud_Rate);
     edu.ENV.Begin();
-    edu.Motion.Begin();
+    //edu.Motion.Begin();
+    edu.Angle.Begin();
     edu.WiFi.Begin(HCRL_WiFi_SSID, HCRL_WiFi_PASS);
     edu.MQTT.Begin(HCRL_MQTT_SERVER, HCRL_MQTT_PORT, callback);
     edu.MQTT.StartSubscribe("/Test");
@@ -27,7 +28,8 @@ void loop()
     Sprintln(String(edu.ENV.GetHumi()));
     Sprintln(String(edu.ENV.GetTemp()));
     Sprintln(String(edu.ENV.GetPressure()));
-    Sprintln(String(edu.Motion.GetValue()));
+    //Sprintln(String(edu.Motion.GetValue()));
+    Sprintln(String(edu.Angle.GetValue()));
     Sprintln("===========================");
 
     TaskDelay(1000);

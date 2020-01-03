@@ -5,6 +5,7 @@
 #include "MQTT/MqttTask.h"
 #include "WiFi/WiFiTask.h"
 #include "Sensors/ENVs/ENVs.h"
+#include "Sensors/Angle/AngleClass.h"
 #include "Sensors/MotionClass/MotionClass.h"
 #include "System/SystemDefaults.hpp"
 #include "System/SystemMacros.hpp"
@@ -17,6 +18,8 @@ public:
     HCRL_Edu(/* args */);
     ~HCRL_Edu();
     ENVs ENV;
+    AngleClass Angle;
+
     MqttTask MQTT;
     WiFiTask WiFi;
     MotionClass Motion;
