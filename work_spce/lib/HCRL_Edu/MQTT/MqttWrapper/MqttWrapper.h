@@ -29,10 +29,12 @@ public:
     void Publish(const char *Topic, const char *Payload);
     void ReConnect();
     void Update();
+
     void PrintSubscribeTopic();
     void PrintPublishTopic();
     boolean isConnected();
     char *GetServer();
+    int GetPort();
 };
 
 MqttWrapper::MqttWrapper(/* args */)
@@ -53,6 +55,10 @@ char *MqttWrapper::GetServer()
 {
     return this->Server;
 }
+int MqttWrapper::GetPort()
+{
+    return this->Port;
+}
 
 void MqttWrapper::Begin(const char *Server, int Port, MQTT_CALLBACK_SIGNATURE)
 {
@@ -70,6 +76,7 @@ void MqttWrapper::StartSubscribe(const char *Topic)
 
 void MqttWrapper::Publish(const char *Topic, const char *Payload)
 {
+    this->Add2List(this->PublishTopic, Topic);
     this->mqtt.publish(Topic, Payload);
 }
 

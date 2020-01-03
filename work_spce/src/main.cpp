@@ -60,11 +60,11 @@ void setup()
     mqttTask.StartSubscribe("/Test");
     mqttTask.StartSubscribe("/Test3");
     mqttTask.StartSubscribe("/Test4");
-    //mqttTask.Update();
+    mqttTask.PrintSubscribeTopic();
 }
 
 void loop()
 {
-    mqttTask.Publish("/Test2", "Hello");
+
     TaskDelay(1000);
 }

@@ -8,13 +8,14 @@
 #include "System/SystemMacros.hpp"
 #include "MqttWrapper/MqttWrapper.h"
 
-class MqttTask : public MqttWrapper
+class MqttTask
 {
 private:
     MqttWrapper wrapper;
-
     TaskHandle_t UpdateHandle;
+
     boolean isNewTopic = false;
+
     static void UpdateCode(void *);
 
 public:
@@ -24,6 +25,12 @@ public:
     void Update();
     void StartSubscribe(const char *Topic);
     void Publish(const char *Topic, const char *Payload);
+
+    void PrintSubscribeTopic();
+    void PrintPublishTopic();
+    boolean isConnected();
+    char *GetServer();
+    int GetPort();
 };
 
 MqttTask::MqttTask(/* args */)
@@ -77,6 +84,27 @@ void MqttTask::Publish(const char *Topic, const char *Payload)
         this->Update();
     }
     this->wrapper.Publish(Topic, Payload);
+}
+
+void MqttTask::PrintSubscribeTopic()
+{
+    this->wrapper.PrintSubscribeTopic();
+}
+void MqttTask::PrintPublishTopic()
+{
+    this->wrapper.PrintPublishTopic();
+}
+boolean MqttTask::isConnected()
+{
+    return this->wrapper.isConnected();
+}
+char *MqttTask::GetServer()
+{
+    return this->wrapper.GetServer();
+}
+int MqttTask::GetPort()
+{
+    return this->wrapper.GetPort();
 }
 
 #endif
