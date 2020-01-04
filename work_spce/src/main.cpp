@@ -30,9 +30,10 @@ void loop()
 {
     for (int i = 0; i < 10; i++)
     {
+        edu.StripRGB.SetBrightness(random(255));
         edu.StripRGB.setPixelsColor(i, random(255), random(255), random(255));
     }
-
+    edu.LedRGB.SetBrightness(random(255));
     edu.LedRGB.setPixelsColor(0, random(255), random(255), random(255));
     edu.LedRGB.setPixelsColor(1, random(255), random(255), random(255));
     edu.LedRGB.setPixelsColor(2, random(255), random(255), random(255));

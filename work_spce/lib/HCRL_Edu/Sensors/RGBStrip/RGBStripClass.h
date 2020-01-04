@@ -22,8 +22,13 @@ public:
     ~RGBStrip();
     void Begin();
     void setPixelsColor(uint16_t n, uint8_t r, uint8_t g, uint8_t b);
+    void SetBrightness(int Value);
 };
 
+void RGBStrip::SetBrightness(int Value)
+{
+    this->pixels.setBrightness(Value);
+}
 RGBStrip::RGBStrip(/* args */)
 {
     this->pixels = Adafruit_NeoPixel(this->NumPixels, this->LedPin, NEO_GRB + NEO_KHZ800);
