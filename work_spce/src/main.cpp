@@ -13,7 +13,7 @@ void setup()
 {
     Serial.begin(Defalult_Baud_Rate);
     edu.LedRGB.Begin();
-
+    edu.StripRGB.Begin();
     //edu.ENV.Begin();
     //edu.Motion.Begin();
     // edu.Angle.Begin();
@@ -28,6 +28,11 @@ void setup()
 
 void loop()
 {
+    for (int i = 0; i < 10; i++)
+    {
+        edu.StripRGB.setPixelsColor(i, random(255), random(255), random(255));
+    }
+
     edu.LedRGB.setPixelsColor(0, random(255), random(255), random(255));
     edu.LedRGB.setPixelsColor(1, random(255), random(255), random(255));
     edu.LedRGB.setPixelsColor(2, random(255), random(255), random(255));

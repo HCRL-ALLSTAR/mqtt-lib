@@ -6,6 +6,7 @@
 #include "Sensors/ENVs/ENVs.h"
 #include "Sensors/Angle/AngleClass.h"
 #include "Sensors/MotionClass/MotionClass.h"
+#include "Sensors/RGBStrip/RGBStripClass.h"
 #include "Sensors/LedRGBClass/LedRGBClass.h"
 #include "System/SystemDefaults.hpp"
 #include "System/SystemMacros.hpp"
@@ -22,7 +23,7 @@ public:
     AngleClass Angle;
     LedRGBClass LedRGB;
     MotionClass Motion;
-
+    RGBStrip StripRGB;
     //Connections
     MqttTask MQTT;
     WiFiTask WiFi;

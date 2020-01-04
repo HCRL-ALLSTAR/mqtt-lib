@@ -1,43 +1,45 @@
-#ifndef LED_RGB_CLASS_H
-#define LED_RGB_CLASS_H
+#ifndef LED_STRIP_CLASS_H
+#define LED_STRIP_CLASS_H
 #include <Arduino.h>
+#include "System/SystemMacros.hpp"
+#include "System/SystemDefaults.hpp"
 //#include <Adafruit_NeoPixel.h>
 #include "Adafruit_NeoPixel/Adafruit_NeoPixel.h"
 
-class LedRGBClass
+class RGBStrip
 {
 private:
     /* data */
-    int LedPin = 26;
-    int NumPixels = 3;
+    int LedPin = 15;
+    int NumPixels = 10;
     Adafruit_NeoPixel pixels;
 
     TaskHandle_t UpdateHandle;
     static void UpdateCode(void *pv);
 
 public:
-    LedRGBClass(/* args */);
-    ~LedRGBClass();
+    RGBStrip(/* args */);
+    ~RGBStrip();
     void Begin();
     void setPixelsColor(uint16_t n, uint8_t r, uint8_t g, uint8_t b);
 };
 
-LedRGBClass::LedRGBClass(/* args */)
+RGBStrip::RGBStrip(/* args */)
 {
     this->pixels = Adafruit_NeoPixel(this->NumPixels, this->LedPin, NEO_GRB + NEO_KHZ800);
 }
 
-LedRGBClass::~LedRGBClass()
+RGBStrip::~RGBStrip()
 {
 }
-void LedRGBClass::Begin()
+void RGBStrip::Begin()
 {
     pixels.begin();
     xTaskCreate(UpdateCode, "Pixels Update Task", Default_Task_Stack, this, 1, &UpdateHandle);
 }
-void LedRGBClass::UpdateCode(void *pv)
+void RGBStrip::UpdateCode(void *pv)
 {
-    LedRGBClass *task = (LedRGBClass *)(pv);
+    RGBStrip *task = (RGBStrip *)(pv);
     for (;;)
     {
 
@@ -45,7 +47,7 @@ void LedRGBClass::UpdateCode(void *pv)
         TaskDelay(delay_Time);
     }
 }
-void LedRGBClass::setPixelsColor(uint16_t n, uint8_t r, uint8_t g, uint8_t b)
+void RGBStrip::setPixelsColor(uint16_t n, uint8_t r, uint8_t g, uint8_t b)
 {
     this->pixels.setPixelColor(n, r, g, b);
 }
