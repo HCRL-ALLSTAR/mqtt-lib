@@ -12,25 +12,31 @@ void callback(char *Topic, byte *Paylaod, unsigned int Length)
 void setup()
 {
     Serial.begin(Defalult_Baud_Rate);
-    edu.ENV.Begin();
+    edu.LedRGB.Begin();
+
+    //edu.ENV.Begin();
     //edu.Motion.Begin();
-    edu.Angle.Begin();
-    edu.WiFi.Begin(HCRL_WiFi_SSID, HCRL_WiFi_PASS);
-    edu.MQTT.Begin(HCRL_MQTT_SERVER, HCRL_MQTT_PORT, callback);
-    edu.MQTT.StartSubscribe("/Test");
-    edu.MQTT.StartSubscribe("/Test3");
-    edu.MQTT.StartSubscribe("/Test4");
-    edu.MQTT.PrintSubscribeTopic();
+    // edu.Angle.Begin();
+    // edu.WiFi.Begin(HCRL_WiFi_SSID, HCRL_WiFi_PASS);
+    // edu.MQTT.Begin(HCRL_MQTT_SERVER, HCRL_MQTT_PORT, callback);
+    // edu.MQTT.StartSubscribe("/Test");
+    // edu.MQTT.StartSubscribe("/Test3");
+    // edu.MQTT.StartSubscribe("/Test4");
+    // edu.MQTT.PrintSubscribeTopic();
+    randomSeed(millis());
 }
 
 void loop()
 {
-    Sprintln(String(edu.ENV.GetHumi()));
-    Sprintln(String(edu.ENV.GetTemp()));
-    Sprintln(String(edu.ENV.GetPressure()));
-    //Sprintln(String(edu.Motion.GetValue()));
-    Sprintln(String(edu.Angle.GetValue()));
-    Sprintln("===========================");
+    edu.LedRGB.setPixelsColor(0, random(255), random(255), random(255));
+    edu.LedRGB.setPixelsColor(1, random(255), random(255), random(255));
+    edu.LedRGB.setPixelsColor(2, random(255), random(255), random(255));
+    // Sprintln(String(edu.ENV.GetHumi()));
+    // Sprintln(String(edu.ENV.GetTemp()));
+    // Sprintln(String(edu.ENV.GetPressure()));
+    // //Sprintln(String(edu.Motion.GetValue()));
+    // Sprintln(String(edu.Angle.GetValue()));
+    // Sprintln("===========================");
 
     TaskDelay(1000);
 }
