@@ -56,7 +56,7 @@ void MqttTask::UpdateCode(void *pv)
     MqttTask *task = (MqttTask *)(pv);
     for (;;)
     {
-        if (task->isNewTopic)
+        if (task->isNewTopic || task->wrapper.SubscribeTopic[0].length() == 0)
         {
             //vTaskDelete(task->UpdateHandle);
             task->wrapper.Update();

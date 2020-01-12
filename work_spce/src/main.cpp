@@ -1,7 +1,12 @@
 #include <Arduino.h>
 #include "HCRL_Edu.h"
+#include "jsonwrapper.hpp"
+#include "ArduinoJson.h"
 
 HCRL_Edu edu;
+float temp;
+float humi;
+float pres;
 void callback(char *Topic, byte *Paylaod, unsigned int Length)
 {
     Paylaod[Length] = '\0';
@@ -12,37 +17,28 @@ void callback(char *Topic, byte *Paylaod, unsigned int Length)
 void setup()
 {
     Serial.begin(Defalult_Baud_Rate);
-    edu.LedRGB.Begin();
-    edu.StripRGB.Begin();
-    //edu.ENV.Begin();
-    //edu.Motion.Begin();
-    // edu.Angle.Begin();
-    // edu.WiFi.Begin(HCRL_WiFi_SSID, HCRL_WiFi_PASS);
-    // edu.MQTT.Begin(HCRL_MQTT_SERVER, HCRL_MQTT_PORT, callback);
-    // edu.MQTT.StartSubscribe("/Test");
-    // edu.MQTT.StartSubscribe("/Test3");
-    // edu.MQTT.StartSubscribe("/Test4");
-    // edu.MQTT.PrintSubscribeTopic();
+    edu.WiFi.Begin(HCRL_WiFi_SSID, HCRL_WiFi_PASS);
+    edu.MQTT.Begin(HCRL_MQTT_SERVER, HCRL_MQTT_PORT, callback);
+    //edu.MQTT.StartSubscribe("/Test");
+    edu.ENV.Begin();
+
     randomSeed(millis());
 }
 
 void loop()
 {
-    for (int i = 0; i < 10; i++)
-    {
-        edu.StripRGB.SetBrightness(random(255));
-        edu.StripRGB.setPixelsColor(i, random(255), random(255), random(255));
-    }
-    edu.LedRGB.SetBrightness(random(255));
-    edu.LedRGB.setPixelsColor(0, random(255), random(255), random(255));
-    edu.LedRGB.setPixelsColor(1, random(255), random(255), random(255));
-    edu.LedRGB.setPixelsColor(2, random(255), random(255), random(255));
-    // Sprintln(String(edu.ENV.GetHumi()));
-    // Sprintln(String(edu.ENV.GetTemp()));
-    // Sprintln(String(edu.ENV.GetPressure()));
-    // //Sprintln(String(edu.Motion.GetValue()));
-    // Sprintln(String(edu.Angle.GetValue()));
-    // Sprintln("===========================");
-
+    temp = edu.ENV.GetTemp();
+    humi = edu.ENV.GetHumi();
+    pres = edu.ENV.GetPressure();
+    size_t size = 1024;
+    DynamicJsonDocument mainDoc(size);
+    char buffer[2048];
+    mainDoc["Temp"] = temp;
+    mainDoc["Humi"] = humi;
+    mainDoc["Pressure"] = pres;
+    serializeJson(mainDoc, buffer);
+    //Sprintln("Temp : " + String(temp) + " | Humi : " + String(humi) + " | Pres : " + String(pres));
+    //Sprintln(buffer);
+    edu.MQTT.Publish("/env", buffer);
     TaskDelay(1000);
 }

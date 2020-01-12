@@ -9,11 +9,9 @@
 
 class MqttWrapper
 {
+
 private:
     WiFiClient client;
-
-    String SubscribeTopic[MAX_LIST_SIZE];
-    String PublishTopic[MAX_LIST_SIZE];
 
     char *Server;
     int Port;
@@ -23,6 +21,8 @@ private:
 
 public:
     PubSubClient mqtt;
+    String SubscribeTopic[MAX_LIST_SIZE];
+    String PublishTopic[MAX_LIST_SIZE];
     MqttWrapper(/* args */);
     ~MqttWrapper();
     void Begin(const char *Server, int Port, MQTT_CALLBACK_SIGNATURE);
