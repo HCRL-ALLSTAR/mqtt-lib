@@ -28,7 +28,7 @@ public:
 
     void PrintSubscribeTopic();
     void PrintPublishTopic();
-    boolean isConnected();
+    boolean getStatus();
     char *GetServer();
     int GetPort();
 };
@@ -94,7 +94,7 @@ void MqttTask::PrintPublishTopic()
 {
     this->wrapper.PrintPublishTopic();
 }
-boolean MqttTask::isConnected()
+boolean MqttTask::getStatus()
 {
     return this->wrapper.isConnected();
 }

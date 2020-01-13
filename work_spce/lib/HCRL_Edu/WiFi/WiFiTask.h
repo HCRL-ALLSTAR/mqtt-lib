@@ -19,7 +19,7 @@ public:
     WiFiTask(/* args */);
     ~WiFiTask();
     void Begin(const char *SSID, const char *PASSWORD);
-    boolean isConnected();
+    boolean getStatus();
     char *getSSID();
     char *getPASSWORD();
 };
@@ -53,7 +53,7 @@ void WiFiTask::Begin(const char *SSID, const char *PASSWORD)
     }
 }
 
-boolean WiFiTask::isConnected()
+boolean WiFiTask::getStatus()
 {
     return this->wrapper.Connected();
 }
