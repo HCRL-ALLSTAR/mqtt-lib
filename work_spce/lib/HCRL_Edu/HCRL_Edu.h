@@ -10,7 +10,7 @@
 #include "Sensors/LedRGBClass/LedRGBClass.h"
 #include "System/SystemDefaults.hpp"
 #include "System/SystemMacros.hpp"
-
+#include "Baterry/baterry.h"
 class HCRL_Edu
 {
 private:
@@ -27,6 +27,8 @@ public:
     //Connections
     MqttTask MQTT;
     WiFiTask WiFi;
+
+    BaterryClass baterry;
 };
 
 HCRL_Edu::HCRL_Edu(/* args */)
