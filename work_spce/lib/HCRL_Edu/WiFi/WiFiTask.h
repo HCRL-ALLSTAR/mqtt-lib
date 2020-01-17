@@ -42,6 +42,11 @@ void WiFiTask::BeginCode(void *pv)
     }
 }
 
+/*
+    start connect to wift with ssid and password
+    SSID (char *)     = wifi name
+    Password (char *) = wifi password
+*/
 void WiFiTask::Begin(const char *SSID, const char *PASSWORD)
 {
     this->SSID = (char *)SSID;

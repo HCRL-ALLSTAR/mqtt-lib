@@ -1,3 +1,20 @@
+/* Example WiFi */
+
+#include <Arduino.h>
+#include "HCRL_Edu.h"
+
+HCRL_Edu hcrl;
+void setup()
+{
+    Serial.begin(Defalult_Baud_Rate);
+    hcrl.WiFi.Begin(HCRL_WiFi_SSID, HCRL_WiFi_PASS);
+}
+
+void loop()
+{
+    hcrl.Update();
+}
+
 // #include <Arduino.h>
 // #include "HCRL_Edu.h"
 // #include "jsonwrapper.hpp"
@@ -55,25 +72,3 @@
 
 //     TaskDelay(1000);
 // }
-
-#include <M5Stack.h>
-#include <Arduino.h>
-#include "Baterry/baterry.h"
-baterry bat;
-void setup()
-{
-    M5.begin();
-    bat.Begin();
-}
-
-void loop()
-{
-    delay(1000);
-    M5.Lcd.clear();
-    M5.Lcd.setTextColor(GREEN);
-    M5.Lcd.setCursor(0, 20);
-    M5.Lcd.setTextSize(2);
-    M5.Lcd.print("Battery Level: ");
-    M5.Lcd.print(bat.getLevel());
-    M5.Lcd.print("%");
-}
