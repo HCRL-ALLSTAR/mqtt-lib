@@ -41,6 +41,19 @@ MqttTask::~MqttTask()
 {
 }
 
+/*
+    Begin Mqtt Connection
+    Server  -> Mqtt Server Address
+    Port    -> Mqtt Server Port 
+    MQTT_CALLBACK_SIGNATURE -> Callback Function in form 
+    Example :
+    void callback(char *Topic, byte *Paylaod, unsigned int Length)
+    {
+        Paylaod[Length] = '\0';
+        String topic_str = Topic, payload_str = (char *)Paylaod;
+        Serial.println("[" + topic_str + "]: " + payload_str);
+    }
+*/
 void MqttTask::Begin(const char *Server, int Port, MQTT_CALLBACK_SIGNATURE)
 {
     this->wrapper.Begin(Server, Port, callback);
@@ -69,13 +82,19 @@ void MqttTask::UpdateCode(void *pv)
         TaskDelay(delay_Time);
     }
 }
-
+/*
+    *** Please Add After Begin Connection ***
+    Start Subscribe to Your Topic 
+*/
 void MqttTask::StartSubscribe(const char *Topic)
 {
     this->wrapper.StartSubscribe(Topic);
     this->isNewTopic = true;
 }
 
+/*  
+    Start Publish To Topic 
+*/
 void MqttTask::Publish(const char *Topic, const char *Payload)
 {
     if (!this->wrapper.isConnected())
