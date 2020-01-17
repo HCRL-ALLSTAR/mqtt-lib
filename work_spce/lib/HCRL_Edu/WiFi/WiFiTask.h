@@ -44,8 +44,8 @@ void WiFiTask::BeginCode(void *pv)
 
 /*
     start connect to wift with ssid and password
-    SSID (char *)     = wifi name
-    Password (char *) = wifi password
+    SSID (char *)     -> wifi name
+    Password (char *) -> wifi password
 */
 void WiFiTask::Begin(const char *SSID, const char *PASSWORD)
 {
@@ -58,14 +58,25 @@ void WiFiTask::Begin(const char *SSID, const char *PASSWORD)
     }
 }
 
+/*
+    Get wifi status 
+    0 -> not connect
+    1 -> connected
+*/
 boolean WiFiTask::getStatus()
 {
     return this->wrapper.Connected();
 }
+/* 
+    Get SSID 
+*/
 char *WiFiTask::getSSID()
 {
     return this->wrapper.getSSID();
 }
+/* 
+    Get Password
+*/
 char *WiFiTask::getPASSWORD()
 {
     return this->wrapper.getPASSWORD();
