@@ -18,6 +18,8 @@ private:
 
     void Add2List(String *List, const char *Topic);
     void PrintList(String *List);
+    char *UserName;
+    char *Password;
 
 public:
     PubSubClient mqtt;
@@ -30,7 +32,7 @@ public:
     void Publish(const char *Topic, const char *Payload);
     void ReConnect();
     void Update();
-
+    void SetUser(const char *UserName, const chat *Password);
     void PrintSubscribeTopic();
     void PrintPublishTopic();
     boolean isConnected();
@@ -81,6 +83,11 @@ void MqttWrapper::Publish(const char *Topic, const char *Payload)
     this->mqtt.publish(Topic, Payload);
 }
 
+void MqttWrapper::SetUser(const char *UserName, const chat *Password)
+{
+    this->UserName = UserName;
+    this->Password = Password;
+}
 void MqttWrapper::ReConnect()
 {
     int Index = 0;

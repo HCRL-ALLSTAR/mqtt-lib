@@ -18,6 +18,8 @@ private:
 
     static void UpdateCode(void *);
     void Update();
+    char *UserName;
+    char *Password;
 
 public:
     MqttTask(/* args */);
@@ -25,6 +27,7 @@ public:
     void Begin(const char *Server, int Port, MQTT_CALLBACK_SIGNATURE);
     void StartSubscribe(const char *Topic);
     void Publish(const char *Topic, const char *Payload);
+    void SetUser(const char *UserName, const chat *Password);
 
     void PrintSubscribeTopic();
     void PrintPublishTopic();
@@ -98,12 +101,19 @@ void MqttTask::StartSubscribe(const char *Topic)
 */
 void MqttTask::Publish(const char *Topic, const char *Payload)
 {
-    if (!this->wrapper.isConnected())
-    {
-        vTaskDelete(this->UpdateHandle);
-        this->Update();
-    }
     this->wrapper.Publish(Topic, Payload);
+}
+
+/*
+    Set Your UserName And Password if you need
+    UserName -> UserName in Mqtt Broker
+    PassWord -> Password in Mqtt Broker
+*/
+void MqttTask::SetUser(const char *UserName, const chat *Password)
+{
+    this->UserName = UserName;
+    this->Password = Password;
+    this->wrapper.SetUser(this->UserName, this->Password);
 }
 
 /*
