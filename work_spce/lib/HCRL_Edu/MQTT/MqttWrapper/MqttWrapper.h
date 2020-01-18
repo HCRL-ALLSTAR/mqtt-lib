@@ -97,7 +97,7 @@ void MqttWrapper::ReConnect()
         String clientId = "ESP8266Client-";
         clientId += String(random(0xffff), HEX);
 
-        if (this->mqtt.connect(clientId.c_str()))
+        if (int(this->UserName) == 0 && int(this->Password) == 0 ? this->mqtt.connect(clientId.c_str()) : this->mqtt.connect(clientId.c_str(), this->UserName, this->Password))
         {
             Sprintln("Connected");
 
