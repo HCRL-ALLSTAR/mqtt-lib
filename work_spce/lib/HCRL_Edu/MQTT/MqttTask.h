@@ -27,7 +27,7 @@ public:
     void Begin(const char *Server, int Port, MQTT_CALLBACK_SIGNATURE);
     void StartSubscribe(const char *Topic);
     void Publish(const char *Topic, const char *Payload);
-    void SetUser(const char *UserName, const chat *Password);
+    void SetUser(const char *UserName, const char *Password);
 
     void PrintSubscribeTopic();
     void PrintPublishTopic();
@@ -109,10 +109,10 @@ void MqttTask::Publish(const char *Topic, const char *Payload)
     UserName -> UserName in Mqtt Broker
     PassWord -> Password in Mqtt Broker
 */
-void MqttTask::SetUser(const char *UserName, const chat *Password)
+void MqttTask::SetUser(const char *UserName, const char *Password)
 {
-    this->UserName = UserName;
-    this->Password = Password;
+    this->UserName = (char *)UserName;
+    this->Password = (char *)Password;
     this->wrapper.SetUser(this->UserName, this->Password);
 }
 

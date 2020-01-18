@@ -14,7 +14,7 @@ void callback(char *Topic, byte *Paylaod, unsigned int Length)
 void setup()
 {
     Serial.begin(Defalult_Baud_Rate);
-    hcrl.MQTT.Begin(HCRL_MQTT_SERVER, HCRL_MQTT_PORT, callback); //Start Connect to Server
+    hcrl.MQTT.Begin(HCRL_MQTT_SERVER, HCRL_MQTT_PORT, callback); //Start Connect to Serve
     hcrl.MQTT.StartSubscribe("YOUR TOPIC");                      // Add Subscribe Topic
 }
 
