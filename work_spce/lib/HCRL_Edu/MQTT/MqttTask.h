@@ -17,12 +17,12 @@ private:
     boolean isNewTopic = false;
 
     static void UpdateCode(void *);
+    void Update();
 
 public:
     MqttTask(/* args */);
     ~MqttTask();
     void Begin(const char *Server, int Port, MQTT_CALLBACK_SIGNATURE);
-    void Update();
     void StartSubscribe(const char *Topic);
     void Publish(const char *Topic, const char *Payload);
 
@@ -64,6 +64,7 @@ void MqttTask::Update()
 {
     xTaskCreate(UpdateCode, MQTT_UPDATE_TASk, Default_Task_Stack, this, 1, &UpdateHandle);
 }
+
 void MqttTask::UpdateCode(void *pv)
 {
     MqttTask *task = (MqttTask *)(pv);
@@ -105,22 +106,40 @@ void MqttTask::Publish(const char *Topic, const char *Payload)
     this->wrapper.Publish(Topic, Payload);
 }
 
+/*
+    Print All Subscribe Topic
+*/
 void MqttTask::PrintSubscribeTopic()
 {
     this->wrapper.PrintSubscribeTopic();
 }
+/*
+    Print All Publish Topic 
+*/
 void MqttTask::PrintPublishTopic()
 {
     this->wrapper.PrintPublishTopic();
 }
+
+/*
+    Get Current Mqtt Connection Status
+*/
 boolean MqttTask::getStatus()
 {
     return this->wrapper.isConnected();
 }
+
+/*
+    Get Mqtt Server Address
+*/
 char *MqttTask::GetServer()
 {
     return this->wrapper.GetServer();
 }
+
+/*
+    Get Mqtt Server Port
+*/
 int MqttTask::GetPort()
 {
     return this->wrapper.GetPort();

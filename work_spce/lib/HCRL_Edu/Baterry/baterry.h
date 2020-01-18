@@ -17,7 +17,13 @@ private:
 public:
     BaterryClass(/* args */);
     ~BaterryClass();
+    /*
+        Begin Battery Level Check
+    */
     void Begin();
+    /*
+        Get Current Baterry level
+    */
     int getLevel();
 };
 
