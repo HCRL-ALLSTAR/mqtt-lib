@@ -19,7 +19,7 @@ void setup()
 
 void loop()
 {
-    hcrl.Update(); //Update Data
+    hcrl.update(); //Update Data
     //hcrl.MQTT.Publish("YOUR TOPIC", "YOUR MSG"); //Publish MSG To Topic
 }
 // #include <Arduino.h>
