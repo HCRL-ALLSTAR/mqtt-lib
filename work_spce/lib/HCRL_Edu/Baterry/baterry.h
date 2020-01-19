@@ -10,17 +10,17 @@ private:
     /* data */
     int8_t level;
 
-    TaskHandle_t UpdateHandle;
-    static void UpdateCode(void *);
+    TaskHandle_t updateHandle;
+    static void updateCode(void *);
     int8_t getBatteryLevel();
 
 public:
     BaterryClass(/* args */);
     ~BaterryClass();
     /*
-        Begin Battery Level Check
+        begin Battery Level Check
     */
-    void Begin();
+    void begin();
     /*
         Get Current Baterry level
     */
@@ -34,7 +34,7 @@ BaterryClass::BaterryClass(/* args */)
 BaterryClass::~BaterryClass()
 {
 }
-void BaterryClass::UpdateCode(void *pv)
+void BaterryClass::updateCode(void *pv)
 {
     BaterryClass *task = (BaterryClass *)(pv);
     for (;;)
@@ -43,10 +43,10 @@ void BaterryClass::UpdateCode(void *pv)
         TaskDelay(delay_Time);
     }
 }
-void BaterryClass::Begin()
+void BaterryClass::begin()
 {
     Wire.begin();
-    xTaskCreate(UpdateCode, "bat update", 1024, this, 1, &UpdateHandle);
+    xTaskCreate(updateCode, "bat update", 1024, this, 1, &updateHandle);
 }
 int BaterryClass::getLevel()
 {

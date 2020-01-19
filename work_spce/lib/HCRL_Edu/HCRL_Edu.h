@@ -99,7 +99,7 @@ public:
 
     BaterryClass baterry;
 
-    void Update();
+    void update();
 };
 
 HCRL_Edu::HCRL_Edu(/* args */)
@@ -113,7 +113,7 @@ HCRL_Edu::~HCRL_Edu()
 /*
 *** Important ***
 for delay loop task and give other task running */
-void HCRL_Edu::Update()
+void HCRL_Edu::update()
 {
     TaskDelay(delay_Time);
 }
