@@ -6,15 +6,15 @@ HCRL_Edu hcrl;
 void setup()
 {
     Serial.begin(Defalult_Baud_Rate);
-    hcrl.ENV.Begin();
+    hcrl.ENV.begin();
 
     //print Details
-    Sprintln("Temperature : " + String(hcrl.ENV.GetTemp()));
-    Sprintln("Humidity : " + String(hcrl.ENV.GetHumi()));
-    Sprintln("Pressure : " + String(hcrl.ENV.GetPressure()));
+    Sprintln("Temperature : " + String(hcrl.ENV.getTemp()));
+    Sprintln("Humidity : " + String(hcrl.ENV.getHumi()));
+    Sprintln("Pressure : " + String(hcrl.ENV.getPressure()));
 }
 
 void loop()
 {
-    hcrl.Update();
+    hcrl.update();
 }

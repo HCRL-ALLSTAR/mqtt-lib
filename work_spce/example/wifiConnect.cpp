@@ -15,5 +15,5 @@ void setup()
 
 void loop()
 {
-    hcrl.Update();
+    hcrl.update();
 }
