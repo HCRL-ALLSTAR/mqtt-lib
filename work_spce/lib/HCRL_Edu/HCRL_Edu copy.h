@@ -23,28 +23,7 @@
     * int getLevel();
     
     Angle 
-    * void Begin();
-    * int GetValue();
     
-    ENV
-    * void Begin();
-    * float GetTemp();
-    * float GetHumi();
-    * float GetPressure();
-    
-    LedRGB 3 Leds
-    * void Begin();
-    * void setPixelsColor(uint16_t n, uint8_t r, uint8_t g, uint8_t b);
-    * void SetBrightness(int Value);
-    
-    RGB Strip 10 Leds
-    * void Begin();
-    * void setPixelsColor(uint16_t n, uint8_t r, uint8_t g, uint8_t b);
-    * void SetBrightness(int Value);
-    
-    Motion
-    * void Begin();
-    * int GetValue();
 */
 
 #ifndef HCRL_Edu_H
