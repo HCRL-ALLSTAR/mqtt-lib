@@ -16,6 +16,12 @@ void setup()
     Serial.begin(Defalult_Baud_Rate);
     hcrl.MQTT.Begin(HCRL_MQTT_SERVER, HCRL_MQTT_PORT, callback); //Start Connect to Server
     hcrl.MQTT.StartSubscribe("YOUR TOPIC");                      // Add Subscribe Topic
+    //print MQTT Details
+    Sprintln("MQTT Server Address : " + String(hcrl.MQTT.GetServer()));
+    Sprintln("MQTT Server Port : " + String(hcrl.MQTT.GetPort()));
+    Sprintln("MQTT Status : " + String(hcrl.MQTT.getStatus()));
+    Sprintln("MQTT Username :  " + String(hcrl.MQTT.GetUsername()));
+    Sprintln("MQTT Password : " + String(hcrl.MQTT.GetPassword()));
 }
 
 void loop()

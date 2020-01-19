@@ -34,6 +34,8 @@ public:
     boolean getStatus();
     char *GetServer();
     int GetPort();
+    char *GetUsername();
+    char *GetPassword();
 };
 
 MqttTask::MqttTask(/* args */)
@@ -153,6 +155,14 @@ char *MqttTask::GetServer()
 int MqttTask::GetPort()
 {
     return this->wrapper.GetPort();
+}
+char *MqttTask::GetUsername()
+{
+    return this->UserName;
+}
+char *MqttTask::GetPassword()
+{
+    return this->Password;
 }
 
 #endif
