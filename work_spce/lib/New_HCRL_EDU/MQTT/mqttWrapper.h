@@ -113,11 +113,12 @@ void mqttWrapper::startSubscribe(const char *topic)
 }
 void mqttWrapper::publish(const char *topic, const char *payload)
 {
+    this->add2List(this->publishList, topic);
     if (!this->mqtt.connected())
     {
         this->reconnect();
     }
-    this->publish(topic, payload);
+    this->mqtt.publish(topic, payload);
 }
 void mqttWrapper::setUser(const char *username, const char *password)
 {
@@ -193,6 +194,5 @@ void mqttWrapper::printList(String *list)
         Index += 1;
     }
 }
-
 
 #endif

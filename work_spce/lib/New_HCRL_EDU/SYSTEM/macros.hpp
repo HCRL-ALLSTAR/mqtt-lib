@@ -1,6 +1,10 @@
 #ifndef System_Macros
 #define System_Macros
 
+#define RGB_LED_PIN 26
+#define RGB_STRIP_PIN 15
+#define RGB_LED_PIXELS 3
+#define RGB_STRIP_PIXELS 10
 #define HCRL_WiFi_SSID "MakeEdu"
 #define HCRL_WiFi_PASS "Hybrid-6Zero7"
 #define HCRL_MQTT_SERVER "161.246.6.147"
