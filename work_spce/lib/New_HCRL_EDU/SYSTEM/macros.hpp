@@ -1,6 +1,7 @@
 #ifndef System_Macros
 #define System_Macros
 
+#define Defalult_Baud_Rate 115200
 #define RGB_LED_PIN 26
 #define RGB_STRIP_PIN 15
 #define RGB_LED_PIXELS 3

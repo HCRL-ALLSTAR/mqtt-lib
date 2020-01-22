@@ -1,16 +1,16 @@
 #include <Arduino.h>
-#include "HCRL_Edu.h"
+#include "HCRL_EDU.h"
 
-HCRL_Edu hcrl;
+HCRL_EDU hcrl;
 void setup()
 {
     Serial.begin(Defalult_Baud_Rate);
-    hcrl.Angle.begin();
+    hcrl.ANGLE.begin();
 }
 
 void loop()
 {
     //print details
-    Sprintln("Current Angle : " + String(hcrl.Angle.getValue()));
+    Sprintln("Current ANGLE : " + String(hcrl.ANGLE.getValue()));
     hcrl.update();
 }

@@ -1,8 +1,7 @@
 #include <Arduino.h>
-#include "HCRL_Edu.h"
+#include "HCRL_EDU.h"
 
-HCRL_Edu hcrl;
-
+HCRL_EDU hcrl;
 // Default Callback Function
 void callback(char *Topic, byte *Paylaod, unsigned int Length)
 {
@@ -21,11 +20,13 @@ void setup()
     Sprintln("MQTT Server Port : " + String(hcrl.MQTT.getPort()));
     Sprintln("MQTT Status : " + String(hcrl.MQTT.getStatus()));
     Sprintln("MQTT Username :  " + String(hcrl.MQTT.getUsername()));
-    Sprintln("MQTT Password : " + String(hcrl.MQTT.getPassword()));
+
+    hcrl.MQTT.printSubscribeTopic(); //Print All subscribe topic
 }
 
 void loop()
 {
     hcrl.update();                               //Update Data
     hcrl.MQTT.publish("YOUR TOPIC", "YOUR MSG"); //Publish MSG To Topic
+    hcrl.MQTT.printpublishTopic();               //Print All publish topic
 }
