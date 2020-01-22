@@ -109,9 +109,10 @@ void setup()
     hcrl.ENV.begin();
     hcrl.MOTION.begin();
     hcrl.RGB_LED.begin();
-    hcrl.RGB_LED.setBrightness(100);
+    hcrl.RGB_LED.setBrightness(50);
+
     hcrl.RGB_STRIP.begin();
-    hcrl.RGB_STRIP.setBrightness(100);
+    hcrl.RGB_STRIP.setBrightness(255);
 }
 
 void loop()
